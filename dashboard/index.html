@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Token Radar — pre-token protocols ranked by implied value</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<header class="top">
+  <div class="top-inner">
+    <div>
+      <p class="kicker">TOKEN RADAR · MODEL RADAR-2</p>
+      <h1>Which protocol launches next — and what is it worth?</h1>
+      <p class="lede">Every protocol in the snapshot that records no token, ranked by the implied value of
+      the token it may one day issue. The board states its model for every row, and every row
+      carries a farm plan with costs and durations.</p>
+    </div>
+    <dl class="meta" id="meta">
+      <div><dt>Snapshot as of</dt><dd id="meta-asof">—</dd></div>
+      <div><dt>Protocols scanned</dt><dd id="meta-scanned">—</dd></div>
+      <div><dt>Watchlist</dt><dd id="meta-watch">—</dd></div>
+      <div><dt>Board rows</dt><dd id="meta-rows">—</dd></div>
+    </dl>
+  </div>
+</header>
+
+<main>
+  <section class="toolbar" aria-label="Board controls">
+    <div class="tabs" role="tablist" aria-label="Board views">
+      <button type="button" data-tab="all" role="tab" aria-selected="true">All ranked</button>
+      <button type="button" data-tab="watchlist" role="tab" aria-selected="false">Watchlist</button>
+      <button type="button" data-tab="early" role="tab" aria-selected="false">Early finds</button>
+      <button type="button" data-tab="live" role="tab" aria-selected="false">Live tokens</button>
+    </div>
+    <label class="search">Search
+      <input type="search" id="q" placeholder="Name or slug…" autocomplete="off">
+    </label>
+    <label class="cat">Category
+      <select id="cat"><option value="">All categories</option></select>
+    </label>
+    <p class="count" id="count" aria-live="polite"></p>
+  </section>
+
+  <aside class="detail" id="detail" aria-label="Protocol detail" hidden>
+    <button type="button" class="close" id="detail-close">Close ×</button>
+    <div id="detail-body"></div>
+  </aside>
+
+  <div class="board-wrap">
+    <table id="board">
+      <caption>Ranked by implied value, rank 1 first. Click a row for its model breakdown and farm plan.</caption>
+      <thead>
+        <tr>
+          <th data-sort="rank" aria-sort="ascending">Rank</th>
+          <th data-sort="name">Protocol</th>
+          <th data-sort="category">Category</th>
+          <th data-sort="chains">Chains</th>
+          <th data-sort="tvl_usd" class="num">TVL</th>
+          <th data-sort="change_7d" class="num">7d</th>
+          <th data-sort="age_days" class="num">Age</th>
+          <th data-sort="implied_value_usd" class="num">Implied value</th>
+        </tr>
+      </thead>
+      <tbody id="rows"></tbody>
+    </table>
+    <p class="empty" id="empty" hidden>No protocol matches this filter.</p>
+  </div>
+
+  <section class="method" aria-label="How the radar scores">
+    <h2>How the radar scores</h2>
+    <p>Implied value follows only from the snapshot's own figures. For a protocol that records no token:</p>
+    <p class="formula"><code>implied = TVL × 0.25 × growth × maturity × breadth × category</code></p>
+    <ul>
+      <li><strong>Growth</strong> — 1 + 0.5 × the seven-day TVL change, clamped to −50%…+150%. Momentum, not hype.</li>
+      <li><strong>Maturity</strong> — 0.55 + 0.45 × age in days (capped at 1,095 days). A protocol that has run
+      three years with no token yet scores more than one listed last month. Past 1,460 days the factor
+      is cut by 0.92: four years with no token yet is a sign the launch may never come. Unknown listing
+      date counts as 365 days.</li>
+      <li><strong>Breadth</strong> — 1 + 0.04 per chain the protocol runs on, up to six chains. Reach is users.</li>
+      <li><strong>Category</strong> — 0.85–1.10 by token economics: fee-bearing categories (exchanges, lending,
+      derivatives) support the largest launches; bridges and staking wrappers are pass-through products.</li>
+    </ul>
+    <p>A protocol whose token already trades is never scored. It appears under <em>Live tokens</em> at the
+    market's own value, so the board never mixes a traded price with a model's claim. DefiLlama's record
+    is not proof: the board says a protocol <em>records no token</em>, never that it has none. Wrapped,
+    staked and versioned products of tokens that already trade are left out of the ranked board entirely.</p>
+    <p>Farm plans are built from the row's own record — its category, its chains, its TVL and its age —
+    never from a hand-written list of names. Capital follows TVL ($50–$500 a position), hold time follows
+    age (30–60 days), gas follows the chain.</p>
+  </section>
+</main>
+
+<footer>
+  <p>Data: DefiLlama public API, fetched once and sealed in the snapshot — the radar reads the same
+  bytes every run. No network, no live prices, no prediction of whether or when a token is issued.</p>
+</footer>
+
+<script src="../data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
